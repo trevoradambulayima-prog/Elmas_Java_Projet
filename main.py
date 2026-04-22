@@ -12,7 +12,7 @@ from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
 # Import beautiful theme configuration
-from theme import COLORS, FONTS, PADDING
+from theme import COLORS, FONTS, PADDING, BUTTON_STYLES
 
 # Application Configuration
 APP_TITLE = "🏥 Elmas Hospital Management System"
@@ -87,6 +87,32 @@ class PatientRecord:
     postnom: str
     telephone: str
     details: str
+
+
+class ProfessionalButton(tk.Button):
+    """
+    Enterprise-grade professional button with enhanced styling
+    """
+    def __init__(self, master, text, command=None, style_type="primary", **kwargs):
+        # Get base style from theme
+        style_config = BUTTON_STYLES.get(style_type, BUTTON_STYLES["primary"]).copy()
+        style_config.update(kwargs)
+        
+        super().__init__(master, text=text, command=command, **style_config)
+        
+        # Bind hover effects for professional look
+        self.bind("<Enter>", self._on_enter)
+        self.bind("<Leave>", self._on_leave)
+        self.original_bg = style_config.get("bg")
+        self.hover_bg = style_config.get("activebackground")
+    
+    def _on_enter(self, event):
+        """Professional hover effect"""
+        self.config(bg=self.hover_bg)
+    
+    def _on_leave(self, event):
+        """Return to normal state"""
+        self.config(bg=self.original_bg)
 
 
 class ScrollableFrame(ttk.Frame):
@@ -173,8 +199,8 @@ class LoginFrame(ttk.Frame):
 
         buttons = ttk.Frame(shell, style="Card.TFrame")
         buttons.pack(fill="x")
-        ttk.Button(buttons, text="Connexion", command=self.verify_login).pack(side="left", expand=True, fill="x", padx=(0, 8))
-        ttk.Button(buttons, text="Quitter", command=self.app.destroy).pack(side="left", expand=True, fill="x")
+        ProfessionalButton(buttons, text="🔐 Connexion", command=self.verify_login, style_type="primary").pack(side="left", expand=True, fill="x", padx=(0, 8))
+        ProfessionalButton(buttons, text="❌ Quitter", command=self.app.destroy, style_type="danger").pack(side="left", expand=True, fill="x")
 
         self.after(25, self._advance_progress, 0)
 
@@ -214,14 +240,14 @@ class MenuFrame(ttk.Frame):
         card = ttk.Frame(self, style="Card.TFrame", padding=28)
         card.pack(anchor="center")
 
-        buttons = [
-            ("Connexion", lambda: self.app.show_frame("login")),
-            ("Gestion des malades", lambda: self.app.show_frame("patients")),
-            ("Calcul de salaire", lambda: self.app.show_frame("salary")),
-            ("Quitter", self.app.destroy),
+        buttons_config = [
+            ("🔐 Connexion", lambda: self.app.show_frame("login"), "primary"),
+            ("👥 Gestion des malades", lambda: self.app.show_frame("patients"), "primary"),
+            ("💰 Calcul de salaire", lambda: self.app.show_frame("salary"), "primary"),
+            ("❌ Quitter", self.app.destroy, "danger"),
         ]
-        for label, action in buttons:
-            ttk.Button(card, text=label, command=action).pack(fill="x", pady=8, ipadx=16, ipady=12)
+        for label, action, btn_type in buttons_config:
+            ProfessionalButton(card, text=label, command=action, style_type=btn_type).pack(fill="x", pady=8, ipadx=16, ipady=12)
 
 
 class PatientDashboardFrame(ttk.Frame):
@@ -233,7 +259,7 @@ class PatientDashboardFrame(ttk.Frame):
         header = ttk.Frame(self, style="Card.TFrame")
         header.pack(fill="x", pady=(0, 12))
         ttk.Label(header, text="Gestion des malades", style="Title.TLabel").pack(side="left", padx=12, pady=12)
-        ttk.Button(header, text="Retour au menu", command=lambda: app.show_frame("menu")).pack(side="right", padx=12, pady=12)
+        ProfessionalButton(header, text="← Retour au menu", command=lambda: app.show_frame("menu"), style_type="secondary").pack(side="right", padx=12, pady=12)
 
         notebook = ttk.Notebook(self)
         notebook.pack(fill="both", expand=True)
@@ -287,7 +313,7 @@ class PatientDashboardFrame(ttk.Frame):
         photo = ttk.LabelFrame(parent, text="Photo", style="Section.TLabelframe", padding=16)
         photo.pack(fill="x", padx=8, pady=8)
         ttk.Label(photo, textvariable=self.photo_path, background="white", foreground=PRIMARY).pack(side="left", padx=(0, 12))
-        ttk.Button(photo, text="Choisir une photo", command=self.select_photo).pack(side="left")
+        ProfessionalButton(photo, text="📷 Choisir une photo", command=self.select_photo, style_type="secondary").pack(side="left")
 
     def _build_exams_tab(self, parent: ttk.Frame) -> None:
         symptoms = ttk.LabelFrame(parent, text="Symptomes", style="Section.TLabelframe", padding=16)
@@ -319,7 +345,7 @@ class PatientDashboardFrame(ttk.Frame):
         prescription = ttk.LabelFrame(parent, text="Prescription", style="Section.TLabelframe", padding=16)
         prescription.pack(fill="x", padx=8, pady=8)
         ttk.Combobox(prescription, textvariable=self.prescription_var, values=MEDICINES, state="readonly").grid(row=0, column=0, sticky="ew", padx=8, pady=6)
-        ttk.Button(prescription, text="Ajouter", command=self.add_prescription).grid(row=0, column=1, padx=8, pady=6)
+        ProfessionalButton(prescription, text="+ Ajouter", command=self.add_prescription, style_type="add").grid(row=0, column=1, padx=8, pady=6)
         prescription.columnconfigure(0, weight=1)
 
         self.prescription_list = tk.Listbox(prescription, height=6)
@@ -327,9 +353,9 @@ class PatientDashboardFrame(ttk.Frame):
 
         actions = ttk.Frame(parent, style="Card.TFrame")
         actions.pack(fill="x", padx=8, pady=8)
-        ttk.Button(actions, text="Enregistrer", command=self.save_patient).pack(side="left", padx=(0, 8))
-        ttk.Button(actions, text="Rechercher", command=self.search_patient).pack(side="left", padx=8)
-        ttk.Button(actions, text="Reinitialiser", command=self.reset_form).pack(side="left", padx=8)
+        ProfessionalButton(actions, text="✓ Enregistrer", command=self.save_patient, style_type="success").pack(side="left", padx=(0, 8))
+        ProfessionalButton(actions, text="🔍 Rechercher", command=self.search_patient, style_type="primary").pack(side="left", padx=8)
+        ProfessionalButton(actions, text="↻ Reinitialiser", command=self.reset_form, style_type="subtle").pack(side="left", padx=8)
 
     def select_photo(self) -> None:
         selected = filedialog.askopenfilename(
@@ -425,7 +451,7 @@ class PatientDashboardFrame(ttk.Frame):
                 results.insert("end", patient.details + "\n")
                 results.insert("end", "-" * 72 + "\n")
 
-        ttk.Button(dialog, text="Rechercher", command=run_search).pack(anchor="e", padx=16, pady=(0, 16))
+        ProfessionalButton(dialog, text="🔍 Rechercher", command=run_search, style_type="primary").pack(anchor="e", padx=16, pady=(0, 16))
 
     def reset_form(self) -> None:
         for var in self.identity_vars.values():
@@ -456,7 +482,7 @@ class SalaryCalculatorFrame(ttk.Frame):
         header = ttk.Frame(self, style="Card.TFrame")
         header.pack(fill="x", pady=(0, 12))
         ttk.Label(header, text="Calcul de salaire des agents", style="Title.TLabel").pack(side="left", padx=12, pady=12)
-        ttk.Button(header, text="Retour au menu", command=lambda: app.show_frame("menu")).pack(side="right", padx=12, pady=12)
+        ProfessionalButton(header, text="← Retour au menu", command=lambda: app.show_frame("menu"), style_type="secondary").pack(side="right", padx=12, pady=12)
 
         self.identity_vars = {name: tk.StringVar() for name in [
             "matricule",
@@ -550,7 +576,7 @@ class SalaryCalculatorFrame(ttk.Frame):
             ttk.Label(studies, text=label, background="white", foreground=PRIMARY).grid(row=index, column=0, sticky="w", padx=8, pady=6)
             ttk.Entry(studies, textvariable=self.identity_vars[key]).grid(row=index, column=1, sticky="ew", padx=8, pady=6)
         ttk.Label(studies, textvariable=self.photo_path, background="white", foreground=PRIMARY).grid(row=0, column=2, sticky="w", padx=20, pady=6)
-        ttk.Button(studies, text="Choisir une photo", command=self.select_photo).grid(row=1, column=2, sticky="w", padx=20, pady=6)
+        ProfessionalButton(studies, text="📷 Photo", command=self.select_photo, style_type="secondary").grid(row=1, column=2, sticky="w", padx=20, pady=6)
         studies.columnconfigure(1, weight=1)
 
     def _build_pay_tab(self, parent: ttk.Frame) -> None:
@@ -608,9 +634,9 @@ class SalaryCalculatorFrame(ttk.Frame):
 
         actions = ttk.Frame(parent, style="Card.TFrame")
         actions.pack(fill="x", padx=8, pady=8)
-        ttk.Button(actions, text="Calculer", command=self.calculate_salary).pack(side="left", padx=(0, 8))
-        ttk.Button(actions, text="Enregistrer", command=self.save_salary_sheet).pack(side="left", padx=8)
-        ttk.Button(actions, text="Reinitialiser", command=self.reset_form).pack(side="left", padx=8)
+        ProfessionalButton(actions, text="📊 Calculer", command=self.calculate_salary, style_type="primary").pack(side="left", padx=(0, 8))
+        ProfessionalButton(actions, text="✓ Enregistrer", command=self.save_salary_sheet, style_type="success").pack(side="left", padx=8)
+        ProfessionalButton(actions, text="↻ Reinitialiser", command=self.reset_form, style_type="subtle").pack(side="left", padx=8)
 
     def select_photo(self) -> None:
         selected = filedialog.askopenfilename(

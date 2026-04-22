@@ -25,6 +25,8 @@ FONTS = {
     "subheading": ("Segoe UI", 12, "bold"),
     "body": ("Segoe UI", 11),
     "small": ("Segoe UI", 9),
+    "button": ("Segoe UI", 10, "bold"),
+    "button_large": ("Segoe UI", 11, "bold"),
 }
 
 # Spacing
@@ -46,31 +48,128 @@ WINDOW_SIZE = "1280x840"
 BACKGROUND_COLOR = COLORS["surface"]
 TEXT_COLOR = COLORS["text_primary"]
 
+# Professional Button Styles - Enterprise Grade
+BUTTON_STYLES = {
+    # Primary Action Button (e.g., Save, Submit)
+    "primary": {
+        "bg": COLORS["primary"],
+        "fg": "white",
+        "activebackground": COLORS["hover"],
+        "activeforeground": "white",
+        "font": FONTS["button"],
+        "relief": "flat",
+        "cursor": "hand2",
+        "bd": 0,
+        "padx": PADDING["lg"],
+        "pady": PADDING["md"],
+        "highlightthickness": 0,
+        "overrelief": "raised",
+    },
+    
+    # Add Button (Accent Color - Green)
+    "add": {
+        "bg": COLORS["accent"],
+        "fg": "white",
+        "activebackground": COLORS["success"],
+        "activeforeground": "white",
+        "font": FONTS["button_large"],
+        "relief": "flat",
+        "cursor": "hand2",
+        "bd": 0,
+        "padx": PADDING["xl"],
+        "pady": PADDING["lg"],
+        "highlightthickness": 0,
+        "overrelief": "raised",
+    },
+    
+    # Secondary Button
+    "secondary": {
+        "bg": COLORS["secondary"],
+        "fg": "white",
+        "activebackground": COLORS["hover"],
+        "activeforeground": "white",
+        "font": FONTS["button"],
+        "relief": "flat",
+        "cursor": "hand2",
+        "bd": 0,
+        "padx": PADDING["lg"],
+        "pady": PADDING["md"],
+        "highlightthickness": 0,
+        "overrelief": "raised",
+    },
+    
+    # Danger Button (Delete, Remove)
+    "danger": {
+        "bg": COLORS["danger"],
+        "fg": "white",
+        "activebackground": "#C93C3C",
+        "activeforeground": "white",
+        "font": FONTS["button"],
+        "relief": "flat",
+        "cursor": "hand2",
+        "bd": 0,
+        "padx": PADDING["lg"],
+        "pady": PADDING["md"],
+        "highlightthickness": 0,
+        "overrelief": "raised",
+    },
+    
+    # Warning Button
+    "warning": {
+        "bg": COLORS["warning"],
+        "fg": "white",
+        "activebackground": "#E89000",
+        "activeforeground": "white",
+        "font": FONTS["button"],
+        "relief": "flat",
+        "cursor": "hand2",
+        "bd": 0,
+        "padx": PADDING["lg"],
+        "pady": PADDING["md"],
+        "highlightthickness": 0,
+        "overrelief": "raised",
+    },
+    
+    # Success Button
+    "success": {
+        "bg": COLORS["success"],
+        "fg": "white",
+        "activebackground": "#1E7E34",
+        "activeforeground": "white",
+        "font": FONTS["button"],
+        "relief": "flat",
+        "cursor": "hand2",
+        "bd": 0,
+        "padx": PADDING["lg"],
+        "pady": PADDING["md"],
+        "highlightthickness": 0,
+        "overrelief": "raised",
+    },
+    
+    # Subtle/Text Button
+    "subtle": {
+        "bg": COLORS["surface"],
+        "fg": COLORS["primary"],
+        "activebackground": COLORS["border"],
+        "activeforeground": COLORS["primary"],
+        "font": FONTS["button"],
+        "relief": "flat",
+        "cursor": "hand2",
+        "bd": 1,
+        "padx": PADDING["lg"],
+        "pady": PADDING["md"],
+        "highlightthickness": 0,
+        "overrelief": "raised",
+        "borderwidth": 1,
+    },
+}
+
 # Component Styles
-BUTTON_STYLE = {
-    "bg": COLORS["accent"],
-    "fg": "white",
-    "activebackground": COLORS["success"],
-    "activeforeground": "white",
-    "font": FONTS["body"],
-    "relief": "flat",
-    "cursor": "hand2",
-    "bd": 0,
-    "padx": PADDING["lg"],
-    "pady": PADDING["md"],
-}
+BUTTON_STYLE = BUTTON_STYLES["primary"]
 
-BUTTON_DANGER = {
-    **BUTTON_STYLE,
-    "bg": COLORS["danger"],
-    "activebackground": "#C93C3C",
-}
+BUTTON_DANGER = BUTTON_STYLES["danger"]
 
-BUTTON_SECONDARY = {
-    **BUTTON_STYLE,
-    "bg": COLORS["secondary"],
-    "activebackground": COLORS["hover"],
-}
+BUTTON_SECONDARY = BUTTON_STYLES["secondary"]
 
 ENTRY_STYLE = {
     "font": FONTS["body"],
@@ -100,4 +199,6 @@ TIPS = {
     "proper_spacing": "Use consistent padding and margins",
     "clear_hierarchy": "Make important elements stand out",
     "accessible_fonts": "Use sans-serif fonts for clarity",
+    "professional_buttons": "Use gradient-like effects with color transitions",
+    "hover_feedback": "Provide visual feedback on interaction",
 }
