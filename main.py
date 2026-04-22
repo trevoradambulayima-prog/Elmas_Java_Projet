@@ -1,3 +1,9 @@
+"""
+🏥 Elmas Hospital Management System
+A beautiful desktop application for hospital administration and patient management
+Built with Tkinter for Python cross-platform compatibility
+"""
+
 from __future__ import annotations
 
 import tkinter as tk
@@ -5,13 +11,18 @@ from dataclasses import dataclass
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
+# Import beautiful theme configuration
+from theme import COLORS, FONTS, PADDING
 
-APP_TITLE = "Gestion Hospitaliere"
+# Application Configuration
+APP_TITLE = "🏥 Elmas Hospital Management System"
 WINDOW_SIZE = "1280x840"
-PRIMARY = "#4d5968"
-SURFACE = "#f0f2f5"
-ACCENT = "#2e7d5a"
-DANGER = "#9a4c4c"
+
+# Use theme colors with fallbacks
+PRIMARY = COLORS["primary"]
+SURFACE = COLORS["surface"]
+ACCENT = COLORS["accent"]
+DANGER = COLORS["danger"]
 
 SYMPTOMS = [
     "Fievre",
